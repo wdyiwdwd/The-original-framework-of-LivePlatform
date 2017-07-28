@@ -1,0 +1,6 @@
+Django==1.11.3
+dwebsocket==0.4.2
+mysqlclient==1.3.10
+
+pytz==2017.2
+six==1.10.0
