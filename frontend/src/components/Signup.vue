@@ -21,9 +21,8 @@
 
     <div>
         <div>{{ count }}</div>
-        <input type="button" value="increace" @click="increace()">
+        <input type="button" value="increace" @click="increace()">66
     </div>
-
   </div>
 </template>
 
@@ -61,7 +60,7 @@ export default {
             }
         }).then(function (res) {
             alert(res.body)
-            this.$router.push({path: '/hello', query:{data: res.body}})
+            //this.$router.push({path: '/hello', query:{data: res.body}})
         }, function () {
             alert("ajax failure")
         })
@@ -72,16 +71,13 @@ export default {
         this.$http({
             url: '/login/',
             method: 'POST',
-            data: {
-                'username': this.username,
-                'password': this.password
+            body: {
+                username: this.username,
+                password: this.password,
             },
-            headers: {
-                'Content-Type':'application/x-www-form-urlencoded'
-            }
         }).then(function (res) {
             alert(res.body)
-            //this.$router.push({path: '/hello', query:{data: res.body}})
+            this.$router.push({path: '/hello', query:{data: res.body}})
         }, function () {
             alert("ajax failure")
         })

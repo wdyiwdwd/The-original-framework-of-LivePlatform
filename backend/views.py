@@ -4,6 +4,8 @@ from .models import Test
 from .forms import TestForm
 from dwebsocket.decorators import accept_websocket,require_websocket
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import auth
+import json
 # Create your views here.
 
 
@@ -20,8 +22,14 @@ def signup_submit(request):
 
 @csrf_exempt
 def login_submit(request):
-	print(request.POST)
-	return HttpResponse("login")
+	print(request.body.decode('utf-8'))
+	body_unicode = request.body.decode('utf-8')
+	body = json.loads(body_unicode)
+	user = auth.authenticate(request, username=body['username'], password=body['password'])
+	if not user:
+		return HttpResponse("login failure")
+	auth.login(request, user)
+	return HttpResponse("login success")
 
 def query_repeat_username(request):
 	get_username = request.GET.get('reusername')
