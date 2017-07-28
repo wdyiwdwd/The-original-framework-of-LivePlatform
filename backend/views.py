@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import Test
 from .forms import TestForm
 from dwebsocket.decorators import accept_websocket,require_websocket
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -16,6 +17,11 @@ def signup_submit(request):
 		return HttpResponse("signup success")
 	except:
 		return HttpResponse("signup failure")
+
+@csrf_exempt
+def login_submit(request):
+	print(request.POST)
+	return HttpResponse("login")
 
 def query_repeat_username(request):
 	get_username = request.GET.get('reusername')

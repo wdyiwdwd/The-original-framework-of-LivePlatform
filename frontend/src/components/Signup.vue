@@ -7,6 +7,9 @@
     	<input type="text" name="password" v-model.number="password">
     	<input type="submit" name="submit" value="submit">
     </form>
+
+    <input type="button" name="login" value="login" @click="login">
+
     <input type="text" name="reusername" v-model.number="reusername">
     <input type="button" value="this username repeat?" @click="findrepeat()">
 
@@ -49,7 +52,7 @@ export default {
       submit: function(){
         alert('username: '+this.username)
         alert('password: '+this.password)
-    		this.$http({
+		this.$http({
             url: '/signup',
             method: 'GET',
             params: {
@@ -63,6 +66,26 @@ export default {
             alert("ajax failure")
         })
     	},
+      login(){
+        alert('username: '+this.username)
+        alert('password: '+this.password)
+        this.$http({
+            url: '/login/',
+            method: 'POST',
+            data: {
+                'username': this.username,
+                'password': this.password
+            },
+            headers: {
+                'Content-Type':'application/x-www-form-urlencoded'
+            }
+        }).then(function (res) {
+            alert(res.body)
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+        }, function () {
+            alert("ajax failure")
+        })
+      },
       findrepeat(){
         alert('reusername: '+this.reusername)
         this.$http.get(
