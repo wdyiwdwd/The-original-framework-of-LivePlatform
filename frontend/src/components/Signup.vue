@@ -21,12 +21,15 @@
 
     <div>
         <div>{{ count }}</div>
-        <input type="button" value="increace" @click="increace()">66
+        <input type="button" value="increace" @click="increace()">
     </div>
   </div>
 </template>
 
 <script>
+
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
     data() {
         return {
@@ -38,15 +41,15 @@ export default {
         }
     },
     computed: {
-        count () {
-          return this.$store.getters.getCount
-        }
+        ...mapGetters({
+          count: 'getCount'
+        }),
     },
     methods: {
       //for vuex
-      increace(){
-        this.$store.commit('increment')
-      },
+        ...mapMutations({
+          increace: 'increment'
+        }),
       //for link backend
       submit: function(){
         alert('username: '+this.username)
