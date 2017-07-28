@@ -1,3 +1,6 @@
+//this is for vuex and it is main file in vuex
+//you can find greater examples and explanations in https://vuex.vuejs.org/zh-cn/
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as actions from './actions'

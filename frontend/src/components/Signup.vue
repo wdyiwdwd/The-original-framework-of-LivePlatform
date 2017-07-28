@@ -1,3 +1,5 @@
+<!--这个文件是我写的demo文件的页面部分，下面有注释具体都做了什么-->
+
 <template>
   <div class="signup">
     <form @submit.prevent="submit">
@@ -31,6 +33,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
+    //双向绑定的数据部分
     data() {
         return {
             username: '',
@@ -40,6 +43,7 @@ export default {
             socket: '',
         }
     },
+    //这两个map是vuex的部分
     computed: {
         ...mapGetters({
           count: 'getCount'
@@ -51,6 +55,7 @@ export default {
           increace: 'increment'
         }),
       //for link backend
+      //提交表单，用于注册，GET请求，返回字符串
       submit: function(){
         alert('username: '+this.username)
         alert('password: '+this.password)
@@ -68,6 +73,7 @@ export default {
             alert("ajax failure")
         })
     	},
+        //用于登录，POST请求，返回字符串，透过前端路由跳转页面
       login(){
         alert('username: '+this.username)
         alert('password: '+this.password)
@@ -85,6 +91,7 @@ export default {
             alert("ajax failure")
         })
       },
+      //查找这个用户名是否数据库中有重复
       findrepeat(){
         alert('reusername: '+this.reusername)
         this.$http.get(
@@ -95,6 +102,7 @@ export default {
             alert("ajax failure")
         })
       },
+      //建立websocket链接
       buildwebsocket(){
         if(this.socket === '' || this.socket.readyState == WebSocket.CLOSED){
           this.socket = new WebSocket("ws://" + window.location.host + "/websocket/")
@@ -106,6 +114,7 @@ export default {
             console.log('message: ' + e.data)//打印出服务端返回过来的数据
         }
       },
+      //通过websocket协议进行发送消息，接收消息
       sendmessage(){
             //如果未连接到websocket
             if(this.socket === '' || this.socket.readyState == WebSocket.CLOSED) {
@@ -114,6 +123,7 @@ export default {
                 this.socket.send("666")//通过websocket发送数据
             }
       },
+      //关闭websocket链接
       closewebsocket(){
         if (this.socket!=='' && this.socket.readyState == WebSocket.OPEN) {
             this.socket.close();//关闭websocket

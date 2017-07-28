@@ -1,3 +1,5 @@
+<!--整个程序的入口-->
+
 <template>
   <div id="app">
     <img src="./assets/logo.png">

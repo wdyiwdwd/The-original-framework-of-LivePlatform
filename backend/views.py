@@ -8,7 +8,7 @@ from django.contrib import auth
 import json
 # Create your views here.
 
-
+#注册执行的函数，接收GET请求，返回字符串
 def signup_submit(request):
 	username = request.GET.get('username')
 	password = request.GET.get('password')
@@ -20,6 +20,7 @@ def signup_submit(request):
 	except:
 		return HttpResponse("signup failure")
 
+#登录执行的函数，接收POST请求，返回字符串，注意@csrf_exempt目前来说必不可少
 @csrf_exempt
 def login_submit(request):
 	print(request.body.decode('utf-8'))
@@ -31,6 +32,7 @@ def login_submit(request):
 	auth.login(request, user)
 	return HttpResponse("login success")
 
+#查找用户名是否存在函数，接收GET请求，返回字符串
 def query_repeat_username(request):
 	get_username = request.GET.get('reusername')
 	print(get_username)
@@ -41,6 +43,7 @@ def query_repeat_username(request):
 	except:
 		return HttpResponse("username is ok") 
 
+#向一个TEST表中写入数据，通过django的form形式，比较简单，注意forms.py这个文件
 def insert(request):
 	params = request.POST if request.method == 'POST' else None
 	form = PostForm(params)
@@ -49,7 +52,7 @@ def insert(request):
 		return HttpResponse("insert success")
 	return HttpResponse("insert failure")
 
-
+#websocket的服务器端，接收消息返回消息
 @require_websocket
 def websocket(request):
 	for message in request.websocket:

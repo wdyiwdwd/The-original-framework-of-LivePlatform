@@ -1,7 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>returns : {{ $route.query.data }}</h2>
+    <!--这个地方注意一下，这个地方是通过前端路由把数据发送到这里来的-->
+    <h2 id="return">returns : {{ $route.query.data }}</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
@@ -35,6 +36,10 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+}
+
+#return{
+  color: red;
 }
 
 ul {
