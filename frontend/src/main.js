@@ -10,8 +10,7 @@ import router from './router'
 import store from './store'
 import  VueResource  from 'vue-resource'
 
-Vue.use(VueResource) 
-Vue.use(Vuex)
+Vue.use(VueResource)
 
 Vue.config.productionTip = false
 
@@ -25,7 +24,7 @@ new Vue({
   http: {
     root: '/root',
     headers: {
-      Authorization: 'Basic YXBpOnBhc3N3b3Jk'
+      //Authorization: 'Basic YXBpOnBhc3N3b3Jk'
     }
   }
 
