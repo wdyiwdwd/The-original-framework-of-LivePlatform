@@ -23,7 +23,7 @@
 
     <div>
         <div>{{ count }}</div>
-        <input type="button" value="increace" @click="increace()">
+        <input type="button" value="increace" @click="increace()">22
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
             password: '',
             reusername: '',
             email: '',
-            socket: '',
+            socket: ''
         }
     },
     //这两个map是vuex的部分
@@ -84,6 +84,30 @@ export default {
                 username: this.username,
                 password: this.password,
             },
+            before:  function(request) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = (new String(cookies[i])).trim();
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+             if (!(/^http:.*/.test(request.url) || /^https:.*/.test(request.url))) {
+               
+                 // Only send the token to relative URLs i.e. locally.
+                  alert(getCookie('csrftoken'))
+                  alert(request.url)
+                  console.log(request.headers.set('X-CSRFToken', getCookie('csrftoken')))
+             }
+            }, 
         }).then(function (res) {
             alert(res.body)
             this.$router.push({path: '/hello', query:{data: res.body}})

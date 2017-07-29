@@ -21,7 +21,7 @@ def signup_submit(request):
 		return HttpResponse("signup failure")
 
 #登录执行的函数，接收POST请求，返回字符串，注意@csrf_exempt目前来说必不可少
-@csrf_exempt
+#@csrf_exempt
 def login_submit(request):
 	print(request.body.decode('utf-8'))
 	body_unicode = request.body.decode('utf-8')
