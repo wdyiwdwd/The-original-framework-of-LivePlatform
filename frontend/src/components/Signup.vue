@@ -8,14 +8,15 @@
     	<input type="text" name="username" v-model.number="username">
     	<label>password: </label>
     	<input type="text" name="password" v-model.number="password">
-    	<input type="submit" name="submit" value="submit">
+    	<input type="submit" name="submit" value="signup">
     </form>
-
-    <input type="button" name="login" value="login" @click="login">
-
-    <input type="text" name="reusername" v-model.number="reusername">
-    <input type="button" value="this username repeat?" @click="findrepeat()">
-
+    <div>
+      <input type="button" name="login" value="login" @click="login">
+    </div>
+    <div>
+      <input type="text" name="reusername" v-model.number="reusername">
+      <input type="button" value="this username repeat?" @click="findrepeat()">
+    </div>
     <div>
         <input type="button" value="build websocket" @click="buildwebsocket()">
         <input type="button" value="send websocket" @click="sendmessage()">
@@ -108,8 +109,9 @@ export default {
       },
       //建立websocket链接
       buildwebsocket(){
+        alert('websocket connect')
         this.socket = wsConnect('/websocket/', function(e){
-            console.log('yesyesyes' + e.data)
+            alert('receive message from server: ' + e.data)
         })
         },
       /*buildwebsocket(){
@@ -125,10 +127,12 @@ export default {
       },*/
       //通过websocket协议进行发送消息，接收消息
       sendmessage(){
+          alert('sent message to server')
            wsSend(this.socket, "666")
       },
       //关闭websocket链接
       closewebsocket(){
+            alert('websocket close')
             wsClose(this.socket)
       }
     },
@@ -137,5 +141,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

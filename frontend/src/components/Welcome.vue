@@ -1,14 +1,29 @@
 <template>
   <div id="welcome">
-    <img src="../assets/bg1.jpg">
-    <router-link to="/hello">Go to Hello</router-link>
-    <router-link to="/signup">Go to Signup</router-link>
+  	<div>
+  	<p>Welcome To Our Demo</p>
+	<router-link to="/hello" class="link">Go to Hello&nbsp;&nbsp;&nbsp;</router-link>
+	<router-link to="/signup" class="link">Go to Signup</router-link>
+	<div>
   </div>
 </template>
 
 <style scoped>
-img {
-  height: 700px;
-  width: 100%;
+#welcome {
+	height: 732px;
+	background-repeat: no-repeat;
+	background-image: url("../assets/bg1.jpg");
+	border:1px solid white;
+}
+p{
+	color: white;
+	font-size: 50px;
+	padding-top: 250px;
+}
+.link {
+	display: inline-block;
+	color: white;
+	font-size: 40px;
+	text-decoration:none;
 }
 </style>
