@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <img src="../assets/logo.png">
     <h1>{{ msg }}</h1>
     <!--这个地方注意一下，这个地方是通过前端路由把数据发送到这里来的-->
     <h2 id="return">returns : {{ $route.query.data }}</h2>
