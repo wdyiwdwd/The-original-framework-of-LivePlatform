@@ -2,6 +2,7 @@
 
 <template>
   <div class="signup">
+    <img src="../assets/logo.png">
     <form @submit.prevent="submit">
     	<label>username: </label>
     	<input type="text" name="username" v-model.number="username">
@@ -61,7 +62,7 @@ export default {
       submit: function(){
         alert('username: '+this.username)
         alert('password: '+this.password)
-		this.$http({
+		    this.$http({
             url: '/signup/',
             method: 'GET',
             params: {
@@ -87,7 +88,6 @@ export default {
                 password: this.password,
             },
             before: function(request){beforePost(request)},
-
         }).then(function (res) {
             alert(res.body)
             this.$router.push({path: '/hello', query:{data: res.body}})
