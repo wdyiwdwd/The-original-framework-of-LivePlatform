@@ -9,8 +9,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 import  VueResource  from 'vue-resource'
+import iView from 'iview'
+import '../my-theme/index.less'
 
 Vue.use(VueResource)
+Vue.use(iView);
 
 Vue.config.productionTip = false
 

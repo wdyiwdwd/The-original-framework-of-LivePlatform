@@ -1,14 +1,41 @@
 <!--这个文件是我写的demo文件的页面部分，下面有注释具体都做了什么-->
 
 <template>
-  <div class="signup">
-    <img src="../assets/logo.png">
-    <form @submit.prevent="submit">
+  <div id="all">
+    <h1 id="title">This page Is For Test</h1>
+    <Form :label-width="80">
+        <Form-item label="username" class="white">
+            <Input v-model="username" placeholder="please input your username"></Input>
+        </Form-item>
+        <Form-item label="password" class="white">
+            <Input v-model="password" placeholder="please input your password"></Input>
+        </Form-item>
+        <Form-item>
+            <Button type="primary" @click="signup()">signup</Button>
+            <Button type="info" @click="login">login</Button>
+        </Form-item>
+    </Form>
+    <Form :label-width="80" inline>
+        <Form-item label="username">
+            <Input v-model="reusername" placeholder="please input your username"></Input>
+        </Form-item>
+        <Form-item>
+            <Button type="ghost" @click="findrepeat()" class="white">repeat?</Button>
+        </Form-item>
+    </Form>
+    <Form inline>
+        <Form-item>
+            <Button type="success" @click="buildwebsocket()">build websocket</Button>
+            <Button type="warning" @click="sendmessage()">send websocket</Button>
+            <Button type="error" @click="closewebsocket()">close websocket</Button>
+        </Form-item>
+    </Form>
+    <!--form @submit.prevent="submit">
     	<label>username: </label>
     	<input type="text" name="username" v-model.number="username">
     	<label>password: </label>
     	<input type="text" name="password" v-model.number="password">
-    	<input type="submit" name="submit" value="signup">
+      <Button type="submit" name="submit">signup</button>
     </form>
     <div>
       <input type="button" name="login" value="login" @click="login">
@@ -21,11 +48,11 @@
         <input type="button" value="build websocket" @click="buildwebsocket()">
         <input type="button" value="send websocket" @click="sendmessage()">
         <input type="button" value="close websocket" @click="closewebsocket()">
-    </div>
+    </div-->
 
     <div>
-        <div>{{ count }}</div>
-        <input type="button" value="increace" @click="increace()">
+        <div class="white" id="count">{{ count }}</div>
+        <Button type="dashed" @click="increace()" class="white">increace</Button>
     </div>
   </div>
 </template>
@@ -60,7 +87,7 @@ export default {
         }),
       //for link backend
       //提交表单，用于注册，GET请求，返回字符串
-      submit: function(){
+      signup(){
         alert('username: '+this.username)
         alert('password: '+this.password)
 		    this.$http({
@@ -141,4 +168,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#all {
+  width: 500px;
+  margin-left:400px;
+}
+#title {
+  font-size: 40px;
+  color: white;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.white{
+  color: white !important;
+}
+#count {
+  font-size: 20px;
+}
 </style>
