@@ -43,7 +43,7 @@
                 </Row>
                 </Form-item>
                 <Form-item id="submit-item">
-                    <Button type="primary" @click="signup()" id="submit">Signupaa</Button>
+                    <Button type="primary" @click="signup()" id="submit">Signup</Button>
                 </Form-item>
             </Form>
         </Card>    
@@ -52,7 +52,9 @@
 </template>
 
 <script>
+
     const countDownNum = 60;
+
     export default {
         data() {
             //this is for check password
@@ -77,10 +79,20 @@
                 }
             }
             const validateVerification = (rule, value, callback) => {
-                console.log(value)
-                console.log(this.code)
                 if(this.code === '' || value.toString() !== this.code.toString()){
                     callback(new Error('verification error'))    
+                }
+                else{
+                    callback()
+                }
+            }
+            const validatePhone = (rule, value, callback) => {
+                let phoneRe = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/
+                if(value === ''){
+                    callback(new Error('please input phone'))
+                }
+                else if(!phoneRe.test(value)){
+                    callback(new Error('this is not phone numbers'))
                 }
                 else{
                     callback()
@@ -107,8 +119,7 @@
                         { type: 'email', message: 'this is not an email', trigger: 'blur' }
                     ],
                     phone: [
-                        { required: true, message: 'please input phone', trigger: 'blur' },
-                        { type: 'string', min: 11, max: 11, message: 'this is not an phone', trigger: 'blur' }
+                        { required: true, type: 'string', validator: validatePhone, trigger: 'blur' },
                     ],
                     password: [
                         { required: true, validator: validatePass, trigger: 'blur' },
@@ -137,7 +148,7 @@
             randomCode(){
                 this.code = Math.random()*8999+1000
                 return Math.floor(this.code)
-            }
+            },
         },
         methods: {
             changeType() {

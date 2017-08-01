@@ -4,17 +4,17 @@
 	<router-link to="/hello" class="link">Go to Hello&nbsp;&nbsp;&nbsp;</router-link>
 	<router-link to="/signup" class="link">Go to Signup</router-link>
 	<div-->
-	<Carousel id="carousel" :height="auto" v-model="value" :trigger="hover">
-        <Carousel-item>
+	<Carousel id="carousel" :height="auto" v-model="value" :trigger="hover" :height="this.height">
+        <Carousel-item :height="this.height">
             <div class="demo-carousel" id="carousel1">
-            	<hello></hello>
+            	<login></login>
             </div>
         </Carousel-item>
         <Carousel-item>
             <div class="demo-carousel" id="carousel2">
             	<h1 id="welcome">Welcome To Our Demo</h1>
-            	<Button type="text" class="link" @click="goLeft()">Go to Hello</Button>
-            	<Button type="text" class="link" @click="goRight()">Go to Test</Button>
+            	<Button type="text" class="link" @click="goLeft()">Go to Login</Button>
+            	<Button type="text" class="link" @click="goRight()">Go to Signup</Button>
             </div>
         </Carousel-item>
         <Carousel-item>
@@ -26,17 +26,20 @@
 </template>
 
 <script>
-import Hello from './Hello'
+import Login from './Login'
 import Signup from './Signup'
+
+
 
 export default {
 	components: {
-	    Hello,
+	    Login,
 	    Signup
   	},
 	data() {
         return {
-            value: 2,
+            value: 1,
+            height: document.documentElement.clientHeight
         }
     },
     methods:{
@@ -71,8 +74,8 @@ p{
 
 .demo-carousel {
 	background-repeat: no-repeat;
-	background-size: 100% 100%;  
-	height: 630px;
+	background-size: 100% 100%; 
+	height: 100%;
 }
 
 #carousel1 {

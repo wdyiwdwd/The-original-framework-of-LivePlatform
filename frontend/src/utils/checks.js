@@ -10,6 +10,17 @@ export const checkSpecialChar = (str) => {
     return true
 }
 
+export const checkObjLegal = (obj) => {
+	for(item in obj) {
+		if(Object.prototype.toString.call(item) === "[object String]"){
+			if(item === '' || !checkSpecialChar(item)){
+				return false
+			}
+		}
+	}
+	return true
+}
+
 export default {
   checkSpecialChar,
 }
