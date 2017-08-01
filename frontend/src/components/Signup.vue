@@ -3,9 +3,9 @@
         <Col span="8" offset="8">
         <Card id="signup" shadow>
             <p slot="title" id="title">Sign Up</p>
-            <Form ref="signinfo" :label-width="80" :model="signinfo" :rules="ruleSignup">
+            <Form ref="signinfo" :label-width="90" :model="signinfo" :rules="ruleSignup">
                 <Form-item>
-                <Button-group id="selectType">
+                <Button-group id="select-type">
                     <Button :type="phoneButton" @click="changeType()">Phone</Button>
                     <Button :type="emailButton" @click="changeType()">Email</Button>
                 </Button-group>
@@ -31,20 +31,19 @@
                         <Radio label="male"></Radio>
                     </Radio-group>
                 </Form-item>
-                <Form-item class="submit-item">
-                    <Button type="primary" @click="sendEmail()" class="submit"  v-if="this.type === 1">SendEmail</Button>
-                    <Button type="primary" @click="sendMessage()" class="submit" v-else>SendMessage</Button>
-                    <Modal v-model="modal" title="Waiting Verification" ok-text="Signup"
-                    cancel-text="Cancel">
-                        <Row>
-                        <Col span="14" offset="1">
-                            <Input v-model="verification" placeholder="please input your Verification"></Input>
-                        </Col>
-                        <Col  span="4" offset="5">
-                            <Button type="primary" @click="resend()" disabled>{{time}}</Button>
-                        </Col>
-                        </Row>
-                    </Modal>
+                <Form-item label="verification:" prop="verification">
+                <Row>
+                    <Col span="12">
+                    <Input v-model="signinfo.verification" placeholder="Input VERIFICATION"></Input>
+                    </Col>
+                    <Col span="6" offset="6">
+                    <Button type="primary" v-if="this.state === 'unsent'" @click="achieveVerification()">Achieve</Button>
+                    <Button type="primary" disabled v-else id="time-button">{{time}}</Button>
+                    </Col>
+                </Row>
+                </Form-item>
+                <Form-item id="submit-item">
+                    <Button type="primary" @click="signup()" id="submit">Signupaa</Button>
                 </Form-item>
             </Form>
         </Card>    
@@ -53,31 +52,42 @@
 </template>
 
 <script>
+    const countDownNum = 60;
     export default {
         data() {
             //this is for check password
             const validatePass = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('please input password'));
+                    callback(new Error('please input password'))
                 } else {
                     if (this.signinfo.passwordCheck !== '') {
                         // 对第二个密码框单独验证
-                        this.$refs.signinfo.validateField('passwordCheck');
+                        this.$refs.signinfo.validateField('passwordCheck')
                     }
-                    callback();
+                    callback()
                 }
             }
             const validatePassCheck = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('please repeat password'));
+                    callback(new Error('please repeat password'))
                 } else if (value !== this.signinfo.password) {
-                    callback(new Error('not same as before'));
+                    callback(new Error('not same as before'))
                 } else {
-                    callback();
+                    callback()
+                }
+            }
+            const validateVerification = (rule, value, callback) => {
+                console.log(value)
+                console.log(this.code)
+                if(this.code === '' || value.toString() !== this.code.toString()){
+                    callback(new Error('verification error'))    
+                }
+                else{
+                    callback()
                 }
             }
             return {
-                // 0 means email 1 means phone
+                // 0 means phone 1 means email
                 type: 0,
                 signinfo: {
                     email: '',
@@ -85,11 +95,12 @@
                     password: '',
                     passwordCheck: '',
                     nickname: '',    
-                    gender: 0,
+                    gender: '',
+                    verification: '',
                 },
-                modal: false,
-                time: 60,
-                verification: '',
+                time: countDownNum,
+                code: '',
+                state: 'unsent',
                 ruleSignup: {
                     email: [
                         { required: true, message: 'please input email', trigger: 'blur' },
@@ -97,43 +108,99 @@
                     ],
                     phone: [
                         { required: true, message: 'please input phone', trigger: 'blur' },
-                        { type: 'number', message: 'this is not an phone', trigger: 'blur' }
+                        { type: 'string', min: 11, max: 11, message: 'this is not an phone', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, validator: validatePass, trigger: 'blur' },
-                        { type: 'string', min: 6, message: 'password must be more than 6 chars', trigger: 'blur' }
+                        { type: 'string', min: 6, max: 25, message: 'password must be more than 6 chars less than 25', trigger: 'blur' }
                     ],
                     passwordCheck: [
                         { required: true, validator: validatePassCheck, trigger: 'blur' }
                     ],
                     nickname: [
-                        { required: true, message: 'please input nickname', trigger: 'blur' },
-                        { type: 'string', min: 6, message: 'nickname must be more than 6 chars', trigger: 'blur' }
+                        { type: 'string', min: 6, max: 20, message: 'nickname must be more than 6 chars less than 20', trigger: 'blur' }
                     ],
-                    gender: [
-                        { required: true, message: 'please choose gender', trigger: 'change' }
+                    verification: [
+                        { required: true, validator: validateVerification, trigger: 'blur' },
+                        { type: 'string', min: 4, max: 4, message: 'verification must be 4 numbers', trigger: 'blur' }
                     ],
                 },
             }
         },
         computed: {
-            phoneButton(){
+            phoneButton() {
                 return (this.type === 0)? "primary" : "ghost"
             },
-            emailButton(){
+            emailButton() {
                 return (this.type === 1)? "primary" : "ghost"
             },
+            randomCode(){
+                this.code = Math.random()*8999+1000
+                return Math.floor(this.code)
+            }
         },
         methods: {
-            changeType(){
+            changeType() {
                 this.type = (this.type === 0)? 1 : 0 
             },
-            sendEmail(){
-                this.modal = true
+            beginCountdown() {
+                const countDown = () => {
+                    this.time-=1
+                    if(this.time <= 0){
+                        this.state = 'unsent'
+                        clearInterval(interval)
+                        this.time = countDownNum
+                    }
+                }
+                let interval = setInterval(function(){countDown()}, 1000)
             },
-            sendMessage(){
-                this.modal = true
+            handleSent() {
+                let result = ''
+                this.$refs['signinfo'].validate((valid) => {
+                    result = valid
+                    if (valid) {
+                        this.$Message.success('Form legal')
+                    } else {
+                        this.$Message.error('Form illegal')
+                    }
+                })
+                return result
             },
+            achieveVerification() {
+                this.state = 'sent'
+                this.beginCountdown();
+                (this.type === 0)? this.sendMessage() : this.sendEmail()                     
+            },
+            sendEmail() {
+            },
+            sendMessage() {
+                let randomCode = this.randomCode
+                this.code = randomCode
+                let data = {
+                    account: 'C78894239',
+                    password:'25ff6ea6a323a00581db9424daefb7c9',
+                    content:  'Your verification code is ' +randomCode+'. Do not reveal to others',
+                    mobile: this.signinfo.phone,
+                    format: 'json',
+                }
+                this.$http.jsonp(
+                    'http://106.ihuyi.com/webservice/sms.php?method=Submit',
+                {
+                    params: data,
+                    jsonp:'cb',
+                }).then(function (res) {
+                    this.$Message.success('Send Success')
+                    //console.log(res.body)
+                }, function (res) {
+                    this.$Message.success('Send Success')
+                    //console.log(res.status)
+                })
+            },
+            signup() {
+                if(this.handleSent()){
+
+                }     
+            }
         },
     }
 </script>
@@ -145,16 +212,19 @@
     margin-top: 10%;
     text-align: left;
 }
-#selectType{
+#select-type{
     float: right;
 }
 #title {
     margin-left:20px;
 }
-.submit{
+#submit{
     float: right;
 }
-.submit-item{
-    margin-top: 15%;
+#submit-item{
+    margin-top: 10%;
+}
+#time-button {
+    float: right;
 }
 </style>
